@@ -36,9 +36,9 @@ if location:
 if symptoms:
     st.write(f"I'm here to help with your symptoms. Let me provide some information.")
 
-# Example medical answer (simplified)
-if "fever" in symptoms.lower():
-    st.write("Fever is often a sign of infection. It's essential to consult a doctor.")
+    # Example medical answer (simplified)
+    if "fever" in symptoms.lower():
+        st.write("Fever is often a sign of infection. It's essential to consult a doctor.")
 
 # End the conversation
 st.write("If you have more questions or need assistance, feel free to ask!")
