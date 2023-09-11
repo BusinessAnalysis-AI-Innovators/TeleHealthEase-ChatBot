@@ -1,25 +1,35 @@
 import streamlit as st
+import spacy
+
+# Load the spaCy model for text classification
+nlp = spacy.load("en_core_web_sm")
 
 # Set the title and page icon
 st.set_page_config(page_title="TeleHealth-Ease Chatbot", page_icon="🌡️")
 
-# Add custom CSS to change the background color to blue
+# Add custom CSS for chat bubbles
 st.markdown(
     """
     <style>
-    body {
-        background-color: #0074e4; /* Blue color */
+    .chat-bubble {
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        display: inline-block;
+    }
+    .user-bubble {
+        background-color: #0074e4;
+        color: white;
+        text-align: right;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Add a title
-st.title("Welcome to TeleHealth-Ease Chatbot")
-
 # Chatbot
-st.write("I'm here to help with your medical questions.")
+st.title("Welcome to TeleHealth-Ease Chatbot")
 
 # User information
 name = st.text_input("What's your name?")
@@ -28,18 +38,26 @@ symptoms = st.text_area("What are you experiencing?")
 
 # Chatbot responses
 if name:
-    st.write(f"Hello, {name}!")
+    st.markdown(f'<div class="chat-bubble user-bubble">{name}</div>', unsafe_allow_html=True)
 
 if location:
-    st.write(f"Nice to know you're in {location}.")
+    st.markdown(f'<div class="chat-bubble user-bubble">{location}</div>', unsafe_allow_html=True)
 
 if symptoms:
-    st.write(f"I'm here to help with your symptoms. Let me provide some information.")
+    st.markdown(f'<div class="chat-bubble user-bubble">{symptoms}</div>', unsafe_allow_html=True)
 
-# Example medical answer (simplified)
-if "fever" in symptoms.lower():
-    st.write("Fever is often a sign of infection. It's essential to consult a doctor.")
+    # Use spaCy for symptom classification
+    doc = nlp(symptoms)
+    symptom_keywords = ["fever", "cough", "headache", "nausea", "fatigue"]
+
+    detected_symptoms = [ent.text for ent in doc if ent.text.lower() in symptom_keywords]
+
+    if detected_symptoms:
+        st.write("Based on your symptoms, it seems you may be experiencing:")
+        for symptom in detected_symptoms:
+            st.markdown(f'<div class="chat-bubble">{symptom.capitalize()}</div>', unsafe_allow_html=True)
 
 # End the conversation
-st.write("If you have more questions or need assistance, feel free to ask!")
+st.balloons()
+
 
