@@ -3,24 +3,42 @@ import streamlit as st
 # Set the title and page icon
 st.set_page_config(page_title="TeleHealth-Ease Chatbot", page_icon="🌡️")
 
+# Add custom CSS to change the background color to blue
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #0074e4; /* Blue color */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Add a title
-st.title("TeleHealth-Ease Chatbot")
+st.title("Welcome to TeleHealth-Ease Chatbot")
 
-# Introduction
-st.write("I'm here to assist you with any medical questions you may have.")
+# Chatbot
+st.write("I'm here to help with your medical questions.")
 
-# User input
-user_input = st.text_input("You: ")
+# User information
+name = st.text_input("What's your name?")
+location = st.text_input("Where are you located?")
+symptoms = st.text_area("What are you experiencing?")
 
-# Simple responses based on user input
-if user_input:
-    # Check for common questions and provide predefined answers
-    if "name" in user_input.lower():
-        st.write("TeleHealth-Ease: My name is TeleHealth-Ease.")
-    elif "location" in user_input.lower() or "stay" in user_input.lower():
-        st.write("TeleHealth-Ease: I'm a virtual assistant, so I don't have a physical location.")
-    else:
-        st.write("TeleHealth-Ease: I'm here to help with your medical questions.")
+# Chatbot responses
+if name:
+    st.write(f"Hello, {name}!")
 
-# Provide instructions to the user
-st.write("Feel free to ask me any medical-related questions or share your symptoms.")
+if location:
+    st.write(f"Nice to know you're in {location}.")
+
+if symptoms:
+    st.write(f"I'm here to help with your symptoms. Let me provide some information.")
+
+# Example medical answer (simplified)
+if "fever" in symptoms.lower():
+    st.write("Fever is often a sign of infection. It's essential to consult a doctor.")
+
+# End the conversation
+st.write("If you have more questions or need assistance, feel free to ask!")
