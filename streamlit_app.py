@@ -1,63 +1,34 @@
 import streamlit as st
 import spacy
 
-# Load the spaCy model for text classification
+# Load the spaCy model (small English model)
 nlp = spacy.load("en_core_web_sm")
 
 # Set the title and page icon
 st.set_page_config(page_title="TeleHealth-Ease Chatbot", page_icon="🌡️")
 
-# Add custom CSS for chat bubbles
-st.markdown(
-    """
-    <style>
-    .chat-bubble {
-        background-color: #f0f0f0;
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px;
-        display: inline-block;
-    }
-    .user-bubble {
-        background-color: #0074e4;
-        color: white;
-        text-align: right;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# Add a title
+st.title("TeleHealth-Ease Chatbot")
 
-# Chatbot
-st.title("Welcome to TeleHealth-Ease Chatbot")
+# Introduction
+st.write("I'm here to assist you with any medical questions you may have.")
 
-# User information
-name = st.text_input("What's your name?")
-location = st.text_input("Where are you located?")
-symptoms = st.text_area("What are you experiencing?")
+# User input
+user_input = st.text_input("You: ")
 
-# Chatbot responses
-if name:
-    st.markdown(f'<div class="chat-bubble user-bubble">{name}</div>', unsafe_allow_html=True)
+# Process user input and provide a response
+if user_input:
+    # Process the user's input using spaCy
+    doc = nlp(user_input)
 
-if location:
-    st.markdown(f'<div class="chat-bubble user-bubble">{location}</div>', unsafe_allow_html=True)
+    # Example responses based on user input
+    if "name" in [token.text.lower() for token in doc]:
+        st.write("TeleHealth-Ease: My name is TeleHealth-Ease.")
+    elif "stay" in [token.text.lower() for token in doc]:
+        st.write("TeleHealth-Ease: I'm a virtual assistant, so I don't have a physical location.")
+    else:
+        st.write("TeleHealth-Ease: I'm here to help with your medical questions.")
 
-if symptoms:
-    st.markdown(f'<div class="chat-bubble user-bubble">{symptoms}</div>', unsafe_allow_html=True)
-
-    # Use spaCy for symptom classification
-    doc = nlp(symptoms)
-    symptom_keywords = ["fever", "cough", "headache", "nausea", "fatigue"]
-
-    detected_symptoms = [ent.text for ent in doc if ent.text.lower() in symptom_keywords]
-
-    if detected_symptoms:
-        st.write("Based on your symptoms, it seems you may be experiencing:")
-        for symptom in detected_symptoms:
-            st.markdown(f'<div class="chat-bubble">{symptom.capitalize()}</div>', unsafe_allow_html=True)
-
-# End the conversation
-st.balloons()
-
+# Provide instructions to the user
+st.write("Feel free to ask me any medical-related questions or share your symptoms.")
 
